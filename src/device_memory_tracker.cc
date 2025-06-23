@@ -236,6 +236,7 @@ void
 DeviceMemoryTracker::TrackActivityInternal(CUpti_Activity* record)
 {
   switch (record->kind) {
+#if defined(CUPTI_ACTIVITY_KIND_MEMORY3)
     case CUPTI_ACTIVITY_KIND_MEMORY2: {
       CUpti_ActivityMemory3* memory_record = (CUpti_ActivityMemory3*)record;
       TRITONBACKEND_CuptiTracker* usage = nullptr;
@@ -287,6 +288,7 @@ DeviceMemoryTracker::TrackActivityInternal(CUpti_Activity* record)
       }
       break;
     }
+#endif
     case CUPTI_ACTIVITY_KIND_EXTERNAL_CORRELATION: {
       CUpti_ActivityExternalCorrelation* corr =
           (CUpti_ActivityExternalCorrelation*)record;
@@ -308,6 +310,7 @@ DeviceMemoryTracker::TrackActivityInternal(CUpti_Activity* record)
   }
 }
 
+#if defined(CUPTI_ACTIVITY_KIND_MEMORY3)
 inline bool
 DeviceMemoryTracker::UpdateMemoryTypeUsage(
     CUpti_ActivityMemory3* memory_record, const bool is_allocation,
@@ -323,5 +326,6 @@ DeviceMemoryTracker::UpdateMemoryTypeUsage(
   }
   return true;
 }
+#endif
 
 }}  // namespace triton::backend
